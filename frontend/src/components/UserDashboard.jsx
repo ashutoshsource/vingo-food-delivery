@@ -4,17 +4,19 @@ import { categories } from '../category'
 import CategoryCard from './CategoryCard'
 import { FaCircleChevronLeft } from "react-icons/fa6";
 import { FaCircleChevronRight } from "react-icons/fa6";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import FoodCard from './FoodCard';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { serverUrl } from '../App';
+import { setCurrentCity } from '../redux/userSlice';
 
 function UserDashboard() {
   const {currentCity,shopInMyCity,itemsInMyCity,searchItems}=useSelector(state=>state.user)
   const cateScrollRef=useRef()
   const shopScrollRef=useRef()
   const navigate=useNavigate()
+  const dispatch=useDispatch()
   const [showLeftCateButton,setShowLeftCateButton]=useState(false)
   const [showRightCateButton,setShowRightCateButton]=useState(false)
    const [showLeftShopButton,setShowLeftShopButton]=useState(false)
@@ -82,6 +84,22 @@ setRightButton(element.scrollLeft+element.clientWidth<element.scrollWidth)
   return (
     <div className='w-screen min-h-screen flex flex-col gap-5 items-center bg-[#fff9f6] overflow-y-auto'>
       <Nav />
+
+
+            {(!shopInMyCity || shopInMyCity.length === 0) && currentCity !== "Duhai" && (
+        <div className='w-full max-w-6xl flex flex-col sm:flex-row items-center justify-between gap-4 p-5 bg-orange-50 border border-orange-200 rounded-2xl mt-4 mx-[10px]'>
+          <div>
+            <h2 className='text-lg font-semibold text-gray-800'>No restaurants found in {currentCity || "your area"} yet</h2>
+            <p className='text-gray-600 text-sm mt-1'>This demo is seeded with sample data for Duhai. Take a look there instead.</p>
+          </div>
+          <button
+            onClick={() => dispatch(setCurrentCity("Duhai"))}
+            className='bg-[#ff4d2d] text-white px-5 py-2 rounded-xl font-medium hover:bg-[#e64528] transition-colors whitespace-nowrap'
+          >
+            View demo city
+          </button>
+        </div>
+      )}
 
       {searchItems && searchItems.length>0 && (
         <div className='w-full max-w-6xl flex flex-col gap-5 items-start p-5 bg-white shadow-md rounded-2xl mt-4'>
