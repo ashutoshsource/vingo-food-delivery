@@ -38,7 +38,7 @@ useUpdateLocation()
   useGetMyOrders()
 
   useEffect(()=>{
-const socketInstance=io(serverUrl,{withCredentials:true,transports:['websocket','polling']})
+const socketInstance=io(serverUrl,{withCredentials:true,transports:['polling']})
 dispatch(setSocket(socketInstance))
 socketInstance.on('connect',()=>{
 if(userData){
